@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "audit_date": "2026-10-18",
+  "dataset_id": "UAVIDS-2025-v1",
+  "source_url": "https://zenodo.org/records/15336998",
+  "local_path_at_execution": "/content/UAVIDS-2025.csv",
+  "execution_environment": "user-operated Google Colab runtime",
+  "evidence_origin": "Output pasted into this conversation by the user; GitHub recorder did not remotely execute the Colab notebook",
+  "independent_remote_reexecution": false,
+  "file": {
+    "bytes": 20054667,
+    "md5": "ec84ed5390d5de42b07e8a011709ff82",
+    "sha256": "d50d339f68be7b23f0bf089dd438b20a1835c13182d8641220538121440164d0",
+    "md5_matches_expected": true,
+    "sha256_matches_expected": true
+  },
+  "table": {
+    "rows": 122171,
+    "columns": [
+      "FlowID",
+      "FlowDuration/s",
+      "SrcAddr",
+      "SrcPort",
+      "DstAddr",
+      "DstPort",
+      "Protocol",
+      "TxPackets",
+      "RxPackets",
+      "LostPackets",
+      "TxBytes",
+      "RxBytes",
+      "TxPacketRate/s",
+      "RxPacketRate/s",
+      "TxByteRate/s",
+      "RxByteRate/s",
+      "MeanDelay/s",
+      "MeanJitter/s",
+      "Throughput/Kbps",
+      "MeanPacketSize",
+      "PacketDropRate",
+      "AverageHopCount",
+      "label"
+    ],
+    "non_label_columns": 22,
+    "missing_cells": 0,
+    "duplicate_full_rows": 0,
+    "label_column": "label",
+    "labels": {
+      "Normal Traffic": 26172,
+      "Blackhole Attack": 26110,
+      "Wormhole Attack": 26086,
+      "Sybil Attack": 24077,
+      "Flooding Attack": 19726
+    }
+  },
+  "limitations": [
+    "Dataset is aggregate flow statistics, not time-causal witness/eligible-handoff observations",
+    "No independent mission family or attack-onset timestamps in enumerated columns",
+    "Class breakdown and complete-row uniqueness do not rule out source/flow identity leakage, correlated samples, or near-duplicates",
+    "Feature availability at an early inference time cannot be assumed from full-flow aggregates",
+    "Authentication confirmed by matching published hashes as reported in user-operated Colab; dataset itself not mounted in GitHub"
+  ],
+  "accepted_for": "Auxiliary offline full-flow classification benchmark; not primary sequential selective-forwarding detection."
+}
