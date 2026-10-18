@@ -4,7 +4,7 @@
 
 This repository is being developed to support rigorous experimental studies that combine GPU-based machine learning, vehicular mobility simulation with SUMO, and communication-network simulation with ns-3. Research questions, methods, datasets, and evaluation protocols will be documented as they are finalized and implemented.
 
-> **Project status:** Repository infrastructure initialized. No model performance claims, simulation results, or reproducibility guarantees are reported at this stage.
+> **Project status:** Experimental protocol drafted (v0.1). No model performance claims, simulation results, or reproducibility guarantees are reported at this stage.
 
 ## Repository organization
 
@@ -43,7 +43,7 @@ Every published numerical result will be linked to a defined run or set of runs,
 
 Small text-based experiment manifests and validated result summaries will be kept in Git. Large datasets, model checkpoints, and raw simulation traces will remain outside Git with documented download locations and integrity checks. No generated or estimated numbers will be presented as measured results.
 
-For the record-keeping requirements, see [Reproducibility](docs/reproducibility.md).
+For the [experimental protocol](docs/experiment_protocol.md), including evaluation and simulation requirements, see the versioned protocol. For run-level record keeping, see [Reproducibility](docs/reproducibility.md).
 
 ## Installation and execution
 
