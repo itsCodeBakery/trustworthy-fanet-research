@@ -2,7 +2,7 @@
 
 **Reproducible research on selective-forwarding attacks and uncertain local monitoring in flying ad hoc networks (FANETs).**
 
-[Research problem](docs/study_design.md) · [Experimental protocol](docs/experiment_protocol.md) · [Reproducibility](docs/reproducibility.md) · [Data registry](datasets/README.md)
+[Research problem](docs/study_design.md) · [Novelty audit](docs/novelty_audit.md) · [Baseline fairness](docs/baseline_protocol.md) · [Experimental protocol](docs/experiment_protocol.md) · [Reproducibility](docs/reproducibility.md) · [Data registry](datasets/README.md)
 
 > **Status — design phase, 18 October 2026.** This repository contains the scientific and reproducibility contract for an original experimental study. The supplied Overleaf research blueprint has planning utilities, but no completed ns-3/SUMO experiment campaign, trained detector, or measured performance advantage. All empirical claims await execution and verification.
 
@@ -19,7 +19,7 @@ When a compromised UAV relay selectively drops packets, a nearby honest UAV may 
 5. **Complete-mission alarm calibration:** calibrate on maxima from independent all-benign missions, using a fixed 600 s horizon and an explicitly stated exchangeability assumption.
 6. **Local response study:** measure whether temporary next-hop avoidance actually improves timely delivery after accounting for false isolation, route repairs, latency, and outages.
 
-The central comparison is with a strong, equally informed **channel-aware statistical residual/CUSUM** detector. A new classifier architecture is **not** claimed as the contribution; utility must be demonstrated experimentally.
+The central comparison is with a strong, equally informed **channel-aware statistical residual/CUSUM** detector. The [research audit](docs/novelty_audit.md) records that channel awareness, early temporal classification, confidence deferral and detector-informed forwarding are all established prior art; any incremental advantage remains an open hypothesis. A new classifier architecture is **not** claimed as the contribution; utility must be demonstrated experimentally.
 
 ## Study design
 

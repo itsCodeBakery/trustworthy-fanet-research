@@ -1,0 +1,11 @@
+claim_id,proposed_statement,status,supporting_work_ids,evidence_or_limitation,required_action
+N01,We are first to distinguish malicious drops from normal wireless loss,REJECTED,CAD2010; CRSA2016,Established channel-aware prior art,Never use
+N02,We propose the first temporal/early FANET grey-hole detector,REJECTED,FANGHETS2025; TARGHD2026,FAN-GHETS24 includes early time-series grey-hole classification,Never use
+N03,Abstention/deferral alone is novel,REJECTED,FANGHETS2025,Confidence-based deferral explicitly implemented,Never use
+N04,Routing recovery triggered by a detector is novel,REJECTED,CAD2010; CRSA2016,Source rerouting / attack-tolerant forwarding already studied,Never use
+N05,A rank-based conformal mission threshold is a new mathematical theorem,REJECTED,SEQUENTIAL2014; generic conformal calibration,Order statistics and calibrated sequential alarms pre-exist,Describe as standard rank calibration under assumptions
+N06,Evidence-quality gating may improve useful selective-forwarding detection,CANDIDATE_UNPROVEN,CAD2010; CRSA2016; FANGHETS2025; TARGHD2026,Differentiate measurable witness-availability gate from confidence deferral and channel estimates,Matched A6 A7 A8 A9; deferral/exposure curves; verify TAR full method
+N07,Independent mission false-accusation control plus transfer and causal recovery is a meaningful empirical result,CANDIDATE_UNPROVEN,All direct studies,No exclusive absence claim from bounded evidence; tests necessary,Frozen 199 calibration; independent family core/transfer and fresh closed loop
+N08,Source's reported published F1 can be compared directly to our local-monitor false alarm,REJECTED,FANGHETS2025; TARGHD2026; FEDGRAPH2026,Different inputs tasks splits alarms metrics and denominators,No common numeric leaderboard without faithful common task
+N09,Source's surveys establish a novel algorithm,REJECTED,Research blueprint and surveyed works,Survey motivation is not a method-level novelty proof,Publish original primary study tests and failure analysis
+N10,We are the first to simulate UAV/FANET selective-forwarding in ns-3,REJECTED,FANGHETS2025,Source uses ns-3 and multiple attack types,Never use
