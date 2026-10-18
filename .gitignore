@@ -218,3 +218,29 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+# Research datasets and machine-generated artifacts
+/datasets/raw/
+/datasets/processed/
+/datasets/cache/
+/results/artifacts/
+/results/checkpoints/
+/results/raw_logs/
+/simulations/sumo/outputs/
+/simulations/ns3/outputs/
+/notebooks/outputs/
+
+# Large binary weights and packet traces (keep verified manifests instead)
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.pcap
+*.pcapng
+
+# Local notebook credentials and execution state
+.kaggle/
+kaggle.json
+.env.*
+!.env.example
