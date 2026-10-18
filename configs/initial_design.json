@@ -1,0 +1,77 @@
+{
+  "status": "INITIAL_DEVELOPMENT_CHOICES_NOT_VALIDATED",
+  "horizon_s": 600,
+  "warmup_s": 30,
+  "flows": 5,
+  "payload_bytes": 512,
+  "packet_rates_per_flow_pps": [
+    5,
+    20
+  ],
+  "radio": {
+    "candidate_ns3": "3.43",
+    "standard": "802.11a",
+    "rate_mbps": 6,
+    "bandwidth_mhz": 20,
+    "tx_dbm": 16,
+    "log_distance_exponent": 2.2,
+    "reference_loss_at_1m_db": 46.7,
+    "nakagami_m": 1,
+    "other_defaults": "Must be specified after build audit"
+  },
+  "detector": {
+    "window_s": 1,
+    "history_windows": 16,
+    "deadline_ms": 200,
+    "min_handoffs": 10,
+    "max_own_tx_busy_fraction": 0.5,
+    "beacon_freshness": "Tune on development missions before calibration",
+    "kappa_candidates": [
+      0.25,
+      0.5,
+      1
+    ],
+    "residual_clip": [
+      -10,
+      10
+    ],
+    "epsilon": 1,
+    "tcn_channels": 32,
+    "kernel_size": 3,
+    "dilations": [
+      1,
+      2,
+      4
+    ],
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "batch_size": 256,
+    "max_epochs": 50,
+    "patience": 8,
+    "model_seeds": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ],
+    "beacon_freshness_candidates_s": [
+      2,
+      5
+    ]
+  },
+  "calibration": {
+    "independent_benign_missions": 199,
+    "primary_alpha": 0.05,
+    "sensitivity_alpha": [
+      0.01,
+      0.1
+    ],
+    "statistic": "maximum across all monitored pairs and decision times in one mission",
+    "alarm_comparison": "strictly greater than threshold"
+  },
+  "response": {
+    "avoidance_s": 10,
+    "max_simultaneously_avoided_neighbours_per_monitor": 1
+  }
+}

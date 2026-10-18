@@ -1,60 +1,75 @@
-# Trustworthy V2X Research
+# Observation-Aware Sequential Detection of Selective Forwarding in UAV Networks
 
-**Reproducible machine-learning and simulation research for trustworthy vehicle-to-everything (V2X) networking.**
+**Reproducible research on selective-forwarding attacks and uncertain local monitoring in flying ad hoc networks (FANETs).**
 
-This repository is being developed to support rigorous experimental studies that combine GPU-based machine learning, vehicular mobility simulation with SUMO, and communication-network simulation with ns-3. Research questions, methods, datasets, and evaluation protocols will be documented as they are finalized and implemented.
+[Research problem](docs/study_design.md) · [Experimental protocol](docs/experiment_protocol.md) · [Reproducibility](docs/reproducibility.md) · [Data registry](datasets/README.md)
 
-> **Project status:** Experimental protocol drafted (v0.1). No model performance claims, simulation results, or reproducibility guarantees are reported at this stage.
+> **Status — design phase, 18 October 2026.** This repository contains the scientific and reproducibility contract for an original experimental study. The supplied Overleaf research blueprint has planning utilities, but no completed ns-3/SUMO experiment campaign, trained detector, or measured performance advantage. All empirical claims await execution and verification.
 
-## Repository organization
+## Research problem
+
+When a compromised UAV relay selectively drops packets, a nearby honest UAV may fail to overhear legitimate forwarding because of fading, congestion, mobility, or monitoring limitations. **A missed forwarding observation is not proof of a malicious drop.** The research question is whether a local detector can identify *exposed* dropping attacks in time while avoiding false accusations over entire missions and withholding judgment when evidence is insufficient.
+
+## Proposed approach
+
+1. **Local monitoring:** use the upstream UAV's successful MAC handoffs, matching overheard relay transmissions, and causally available radio/route context. Simulator ground truth is accessible only to the evaluator.
+2. **Benign observation model:** estimate expected unmatched-forwarding fraction from past-only context with a small temporal model; compare against simple and channel-aware statistical predictors.
+3. **Evidence gate:** defer unsupported accusations when packet counts or radio monitoring quality are inadequate.
+4. **Sequential evidence:** accumulate positive deviations from expected benign forwarding with a one-sided residual score.
+5. **Complete-mission alarm calibration:** calibrate on maxima from independent all-benign missions, using a fixed 600 s horizon and an explicitly stated exchangeability assumption.
+6. **Local response study:** measure whether temporary next-hop avoidance actually improves timely delivery after accounting for false isolation, route repairs, latency, and outages.
+
+The central comparison is with a strong, equally informed **channel-aware statistical residual/CUSUM** detector. A new classifier architecture is **not** claimed as the contribution; utility must be demonstrated experimentally.
+
+## Study design
+
+| Element | Proposed configuration | Evidence status |
+| --- | --- | --- |
+| Network | 25/50 UAVs; 3D patrol and corridor-relay missions | Planned |
+| Attacks | Selective packet drops at p=0.1/0.3/0.6, on–off, flow-selective | Planned |
+| ns-3 | AODV, ad hoc radio, MAC handoff witnesses, network-layer attacks, closed-loop response | Not implemented |
+| SUMO | Ground convoy trajectories for a separate UAV-assisted mission-transfer setting | Not implemented |
+| Kaggle | Small TCN/GRU and comparable baseline training | Not run |
+| Public data | [FAN-GHETS24 v2](https://zenodo.org/records/13692267) | Inventory described in blueprint; full archive not audited |
+| Auxiliary data | [UAVIDS-2025](https://zenodo.org/records/15336998) | Offline flow classification only |
+| Main endpoint | Exposed-attack detection within 30 s at 5% *all-benign mission* alarm target | Not measured |
+
+SUMO does **not** supply aircraft flight dynamics. It supplies only the ground convoy trajectories; 3D UAV paths are independently constructed for ns-3. Normal ns-3/SUMO workloads are CPU-based; Kaggle GPUs are reserved for compatible learning workloads.
+
+## Planned experiments
+
+The uploaded blueprint specifies **2,743 simulator runs across 775 independent mission families**: 192 training, 192 development, 199 all-benign calibration, 960 core tests, 240 convoy transfer, and 960 closed-loop network response runs. **These are planned counts, not completed experiments.** A small observability and resource-cost pilot must pass before the large simulation grid.
+
+Major outputs: correct-relay detection within 30 s, complete-mission false accusations, monitoring deferral/coverage, right-censored detection delay, goodput, timely packet delivery, outage, routing overhead, and resource use. Evaluate uncertainty over independent mission families—not packet windows or multiple views of the same run.
+
+## Repository structure
 
 ```text
-.
-├── configs/                 # Version-controlled experiment configurations
-├── datasets/                # Dataset manifests, provenance, and preparation guides
-├── src/                     # Implementations and reusable Python modules
-├── experiments/             # Experiment definitions and execution records
-├── simulations/
-│   ├── sumo/                # Traffic and vehicular mobility scenarios
-│   └── ns3/                 # Network simulation models and configurations
-├── notebooks/               # Kaggle-compatible experiment notebooks
-├── results/                 # Verified metrics, tables, and experiment summaries
-├── figures/                 # Reproducible publication-quality visualizations
-├── statistical_analysis/    # Confidence intervals, tests, and sensitivity analysis
-├── manuscript/              # Manuscript source and supplementary material
-├── tests/                   # Unit, integration, and validation tests
-└── docs/                    # Protocols and reproduction documentation
+configs/                # Initial settings; freeze after pilot and method audit
+datasets/               # Public dataset registry and acquisition manifests
+manifests/              # Mission families, seeds, split IDs and checksums
+mobility/               # 3D UAV waypoints and SUMO-derived ground tracks
+src/                    # Causal features, models, decision and evaluation code
+simulations/ns3/        # Packet-level UAV networking and relay attack hooks
+simulations/sumo/       # Ground convoy trace export
+notebooks/              # Kaggle GPU notebooks (to be implemented)
+experiments/            # Per-run metadata, configs and auditable status
+results/                # Verified measured outputs only
+figures/                # Figures reproducible from verified outputs
+statistical_analysis/   # Mission-level effects and intervals
+manuscript/             # Research manuscript and supplementary materials
+tests/                  # Unit, simulator-semantic and leakage tests
+docs/                   # Scientific protocol, limitations and reproducibility
 ```
 
-## Research workflow
+Directories may currently contain only placeholders. Their presence is not evidence of implemented code or finished experiments.
 
-The intended experimental workflow connects:
+## Reproduction and research integrity
 
-1. **Data and scenarios:** document dataset sources, licensing, integrity checks, and vehicle-mobility scenarios.
-2. **Learning:** train and evaluate models on GPU resources, with Kaggle-compatible entry points.
-3. **Network simulation:** evaluate methods under explicitly specified SUMO and ns-3 conditions.
-4. **Analysis:** retain per-run metrics, statistical uncertainty, ablations, and reproducible figure-generation scripts.
+Installation and run commands will be provided only when **executed and verified**. Every published number must map to exact source revision, environment versions, independent mission IDs, separate training/development/calibration/test partitions, scenario configuration, random seeds, data hashes, prediction/decision traces and generation script.
 
-These are planned components, **not completed experiments**.
-
-## Reproducibility policy
-
-Every published numerical result will be linked to a defined run or set of runs, including the code revision, dependency versions, input dataset version or checksum, configuration, random seed where applicable, hardware and software details, and evaluation protocol. We will document known non-determinism rather than claim bitwise reproducibility without evidence.
-
-Small text-based experiment manifests and validated result summaries will be kept in Git. Large datasets, model checkpoints, and raw simulation traces will remain outside Git with documented download locations and integrity checks. No generated or estimated numbers will be presented as measured results.
-
-For the [experimental protocol](docs/experiment_protocol.md), including evaluation and simulation requirements, see the versioned protocol. For run-level record keeping, see [Reproducibility](docs/reproducibility.md).
-
-## Installation and execution
-
-**Not available yet.** Verified installation instructions, Kaggle notebook links, SUMO/ns-3 environment specifications, and end-to-end reproduction commands will be added alongside tested implementations. No untested commands are provided here.
-
-## Datasets and results
-
-- [Dataset provenance and access](datasets/README.md)
-- [Experiment records](experiments/README.md)
-- [Results verification](results/README.md)
+Privileged simulated drop logs must never enter the deployable detector. Failed experiments, calibration target violations, harmful mitigation outcomes, and negative results will be reported rather than hidden.
 
 ## License
 
-See [LICENSE](LICENSE) for repository licensing. Third-party datasets, code, and models may carry separate terms and must be reviewed independently.
+See [LICENSE](LICENSE) for repository licensing. Public datasets and third-party dependencies retain their own attribution and license requirements.

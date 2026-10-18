@@ -1,176 +1,79 @@
-# Experimental protocol
+# FANET experimental protocol
 
-**Version:** 0.1 (planning draft)  
-**Status:** PROTOCOL ONLY — not implemented, reviewed, or executed  
-**Last updated:** 2026-10-18  
-**Scope:** Trustworthy vehicle-to-everything (V2X) learning experiments on Kaggle GPUs and network evaluation with SUMO and ns-3
+**Protocol:** 0.1 · **State:** proposed, not yet executed  
+**System:** UAV/FANET selective-forwarding and grey-hole attacks  
+**Mathematical contract:** [study_design.md](study_design.md)
 
-This protocol specifies how evidence will be collected and audited. It intentionally does **not** fix an algorithm, claim a research gap has been validated, or report results. The final prediction task, network use case, datasets, and scenario ranges remain decisions to be justified and recorded **before** final evaluation.
+This file supersedes the earlier generic V2X experiment protocol. It follows the supplied UAV research blueprint; parameters are proposed development choices, not validated optima.
 
-## 1. Study definition and decision freeze
+## 1. Study controls and separation
 
-Before writing substantive model code or accessing final test labels, register the following decisions in this document (or linked version-controlled configurations):
+Prespecify the primary false-alarm endpoint: fraction of **all-benign held-out missions** containing at least one wrong accusation during H=600 s. Primary alarm-budget target alpha=0.05, subject to frozen-detector and exchangeable benign-calibration assumptions. Main detection endpoint: **exposed attacker episodes** detected within 30 s of first eligible malicious drop, with non-detections and remaining follow-up handled explicitly. A compromised node that never drops an eligible packet is not counted as an exposed detection failure.
 
-| Required decision | Status | Record required |
-| --- | --- | --- |
-| Primary research question and falsifiable hypothesis | OPEN | Concrete intended effect and comparison |
-| Unit of prediction and label space | OPEN | E.g., message, flow, vehicle, or time window; ground-truth source |
-| Target network operation and threat model | OPEN | Legitimate participants, attacker capabilities, assumptions, constraints |
-| Primary dataset(s) and permissible usage | OPEN | Canonical URL, version, license, checksums |
-| Primary endpoint and operational threshold | OPEN | Metric, direction, aggregation, decision threshold selection |
-| Baseline implementations | OPEN | Relevant published and classical competitors; links and parity rules |
-| SUMO/ns-3 coupling strategy and supported protocol stack | OPEN | Standalone mobility trace replay versus verified online co-simulation |
-| Scenario parameter grid and exclusion criteria | OPEN | Road network, traffic, radio/channel, load, mobility and failure modes |
+Split data **by independent mission family before constructing windows**. Keep benign/attack/channel/policy variants of the same family in the same split. No training, model selection, feature normalization or gate tuning on final test missions. Calibration missions must be separate all-benign families. Use separate local-observation data versus privileged evaluator-only attack truth.
 
-A later change affecting these decisions must be justified in Git history. Clearly label exploratory analyses separately from confirmatory evaluations. **Do not select a model using final-test outcomes.**
+## 2. Simulator settings: pilot candidate
 
-## 2. Evidence chain
+| Parameter | Initial scope |
+| --- | --- |
+| Mission | M1 3D patrol/search and M2 UAV corridor; M3 ground convoy transfer |
+| UAV count | 25 / 50 |
+| Nominal speed | 5 / 20 m/s; 35 m/s held-out stress |
+| Core traffic | Five UDP flows at 5 / 20 packets/s per flow; 512-byte payload |
+| Routing | AODV |
+| Radio | Candidate ns-3.43; ad hoc 802.11a 6 Mbit/s, 20 MHz, 16 dBm |
+| Channel | Log-distance versus log-distance + Nakagami |
+| Attack | 10% eligible relays; onset 120 s; p=0.1/0.3/0.6, 5 s on/15 s off, flow-selective |
+| Horizon | 600 s with 30 s route-initialization stage |
+| SUMO | M3 *ground vehicle* trajectories only; UAV 3D waypoints independently generated for ns-3 |
 
-The planned workflow is:
+The radio defaults and simulator version must be pinned after a successful build. These are synthetic experiment settings, not validated real-world UAV radio models. Use SUMO's correctly projected metre coordinates; never claim SUMO supplies aircraft dynamics.
 
-```text
-Verified dataset manifests / generated simulation scenario manifests
-    -> integrity checks and leakage-controlled splits
-    -> feature preparation fit on training data only
-    -> baseline + candidate training (Kaggle)
-    -> fixed validation-driven model and threshold selection
-    -> held-out test predictions + resource measurements
-    -> documented SUMO mobility trajectories
-    -> ns-3 network conditions and outcomes
-    -> run-linked analysis, figures, and manuscript tables
-```
+## 3. Before launching a large simulation run
 
-Whether ns-3 consumes time-stamped SUMO mobility traces or connects to an online mobility adapter will be established by integration tests. There is no claim that SUMO and ns-3 are already connected, or that Kaggle hosts the simulation stack.
+Acceptance tests must show: (i) a static three-hop line forwards unique application packets, (ii) attack probability 0 has benign forwarding semantics, (iii) deterministic attack correctly drops only eligible network-layer data packets, (iv) natural radio loss is never logged as malicious drop, (v) observer deafness removes witnesses without changing true forwarding, (vi) header matching deduplicates retransmissions and respects observation deadlines, (vii) local avoidance changes next hop only with a valid alternative, and (viii) UAV/SUMO timestamps, coordinates and altitude constraints are coherent.
 
-## 3. Data integrity, partitions, and leakage prevention
+Run a **small eight-family observability and cost pilot** first. Do not assume a 2,743-run experiment fits CPU budget until runtime/storage is measured.
 
-1. Register canonical source, version/retrieval date, license, file SHA-256, label provenance, and permitted use for each dataset.
-2. Check missing/corrupt samples, duplicates or near-duplicates where appropriate, class distributions, and overlaps between partitions.
-3. Define the **independence unit** before splitting. For example, packets from one session, sequential windows from one vehicle/trip, or observations from one simulated run may be highly correlated.
-4. Split by independent entities and/or chronologically as dictated by the intended deployment. Never randomly split correlated windows or records across training and final test.
-5. Fit preprocessing, normalization, feature selectors, calibrators, and thresholds **only on allowed training/validation partitions**.
-6. Preserve frozen split manifests with entity IDs (or privacy-preserving hashes), split logic, grouping rules, seed, and SHA-256 checksums.
-7. If multiple datasets/scenarios are used, distinguish within-domain, cross-domain, unseen-condition, and temporal evaluations; ensure no overlap in data generation or identities invalidates a transfer claim.
-8. Never relabel or synthetically augment the held-out evaluation partition for the purpose of improving its score. Any simulation ground-truth generation must be independently reproducible.
+## 4. Source-derived planned run matrix
 
-## 4. Training and baseline comparison (Kaggle)
+| Partition | Design | Runs |
+| --- | --- | ---: |
+| Train | 32 core cells × 6 benign families | 192 |
+| Development | 32 cells × 2 families × 3 states | 192 |
+| Calibration | 199 independent all-benign missions | 199 |
+| Core test | 32 cells × 5 families × 6 states | 960 |
+| Convoy transfer | 16 M3 cells × 5 families × 3 states | 240 |
+| Closed-loop | 8 cells × 10 families × 2 states × 6 response policies | 960 |
+| **Total planned** | **775 independent mission families** | **2,743** |
 
-All reported methods should use comparable information access, train/validation/test partitions, and a documented compute budget.
+A core cell is mission(M1/M2) × UAV count(25/50) × speed(5/20) × load(5/20 packets/s/flow) × channel(C1/C2). These counts are **planned simulator runs**, not GPU training sessions or completed measurements.
 
-- Freeze feature definitions, labels, normalization, partitions, and evaluation scripts across methods.
-- Record model configuration, optimizer, batch size, learning-rate schedule, early-stopping criteria, checkpoint-selection criterion, and inference-time preprocessing.
-- Run a smoke test on a small training subset before extensive training, without reporting it as paper evidence.
-- For each principal comparison, use **at least five distinct training seeds** when computationally feasible; if not, disclose the actual count and limit claims accordingly. Repeat baseline runs too, unless stable deterministic evaluation or official reproducible artifacts justify an exception.
-- Track GPU type, driver/CUDA/PyTorch versions, runtime, peak GPU memory, hardware-dependent throughput, and inference latency. Do not compare cross-device latency as if it were controlled.
-- Save predictions with sample IDs and original ground truth for auditing; save training logs and a per-run manifest. Keep bulky checkpoints outside Git with a content hash and access reference.
-- Hyperparameter tuning is performed on train/validation only, under a recorded budget. Repeated inspection of final test data is prohibited.
+## 5. Model comparisons
 
-## 5. Evaluation design
+At minimum compare a fixed watchdog, channel-aware GLM/boosted benign-loss predictor + CUSUM, supervised RF/boosting, supervised GRU/TCN, benign TCN + CUSUM **without** observation gate, and the full observation-aware detector. Audit closest original channel-aware work before claiming exact reimplementation; adaptations must be labelled.
 
-Metrics are **conditional on the actual task**, and must be locked in the study definition before confirmatory evaluation.
+Hold local input availability, train/dev splits, monitoring deadline, resource budget and mission-threshold calibration opportunities comparable. Use five neural training seeds (42–46), and keep independent mission seeds distinct. Do not choose the best trained seed using test outcomes.
 
-| Study layer | Candidate measurements (choose if applicable) | Reporting requirements |
-| --- | --- | --- |
-| Supervised detection/classification | Macro-F1, class-wise recall, precision, balanced accuracy, AUROC, AUPRC | Include class support, positive-class prevalence, full confusion matrix and threshold selection |
-| Rare-event or open-world detection | AUPRC, TPR at fixed FPR, FPR at fixed TPR, unknown-detection performance | Clearly separate known and unseen classes; validation-only threshold selection |
-| Trust/risk estimation | Calibration (ECE/Brier), selective risk versus coverage, abstention rate | Define target event, calibration bins, error/risk costs and operational action |
-| Network operation | Packet delivery ratio, end-to-end delay, throughput, channel overhead, loss/outage rate | Define denominator, traffic generator, observation window and confidence intervals |
-| Runtime/footprint | Training cost, inference latency, memory, model size, transmitted metadata bytes | Record device, batch size, warmup, repetitions and timing boundary |
+## 6. Experiment families
 
-Do not publish metrics that do not match the implemented task. Under class imbalance, avoid accuracy-only claims.
+- **E01:** FAN-GHETS24 v2 public temporal benchmark, after true metadata/split/feature audit.
+- **E02–E03:** independent core detection and all-benign fading/congestion false accusations.
+- **E04–E06:** held-out convoy mission transfer, new attack schedules and 0/10/30/50% *observation-only* witness suppression.
+- **E07:** causal closed-loop AODV route-avoidance simulation on fresh trajectories.
+- **E08–E10:** model/history/gate/CUSUM/mission-calibration ablations, CPU/monitoring cost, and benign/attack observational ambiguity.
+- **E11:** clearly separate UAVIDS-2025 **offline flow** classification, without causal local-monitor or mission-transfer claims.
 
-## 6. Minimum experimental programme
+The primary contrast is the full detector versus **equal-information channel-aware statistical residual CUSUM** at the same complete-mission alarm target. Main outputs: correct-relay exposed detection by 30 s, false accusations per all-benign mission, right-censored delay, gate-open handoff coverage, attack exposure deferred, goodput, timely delivery, outage, route repair, inference latency and memory.
 
-These are **planned experiment families**, not performed experiments. Specific configurations and hypotheses must be defined before running.
+## 7. Calibration and uncertainty
 
-| ID | Family | Purpose | Required control |
-| --- | --- | --- | --- |
-| EXP-00 | Input, split, and environment verification | Detect leakage, invalid labels and runtime mismatch | Checksums and audit logs |
-| EXP-01 | Baseline comparisons | Establish improvements relative to relevant competitive approaches | Same data, information access, and fair tuning budget |
-| EXP-02 | Core-method evaluation | Estimate the candidate method's primary effect | Frozen endpoint, partitions, thresholds and seeds |
-| EXP-03 | Ablations | Attribute effects to individual proposed components | Identical pipeline except the ablated component |
-| EXP-04 | Distribution shift | Evaluate unseen traffic, mobility, topology or attack conditions *as relevant* | Shift defined independently of final test performance |
-| EXP-05 | Sensitivity and robustness | Study hyperparameter, noise, missingness and resource sensitivity | Predeclared sweep ranges and matched seeds |
-| EXP-06 | Cost and scalability | Evaluate GPU and runtime cost and compute / communication footprint | Fixed instrumentation and scaling axes |
-| SIM-01 | SUMO mobility validation | Produce reproducible vehicle trajectories | Fixed map, demand, routes, seed and mobility units |
-| SIM-02 | ns-3 link/network benchmark | Measure communication outcomes without candidate method | Fixed radio stack, channel, application traffic and seed |
-| SIM-03 | Integrated comparison | Compare candidate and baseline decisions under shared mobility/network conditions | Verified mobility import or co-simulation, time synchronization, paired scenarios |
-| STAT-01 | Statistical and failure analysis | Assess variation, uncertainty and failure modes | Independent replication units and linked raw measurements |
+Freeze model, scaler, monitoring gate, deadline, reset rule and CUSUM parameters on train/development data. Score **199 new all-benign calibration missions**; choose mission-max rank threshold at alpha=0.05, with 0.01/0.10 sensitivity. An unattainable finite quantile returns infinity. Do not repair thresholds on shifted test populations; report failures honestly.
 
-A study need not include an irrelevant family, but any omitted family or simulation constraint must be disclosed.
+Report effect sizes and 95% intervals from at least **2,000 independent mission-family bootstrap draws**, stratified by cell where appropriate and preserving paired variants. Do not count repeated packets, windows, or five model seeds as independent missions. Publish raw numerator/denominator, unobserved attackers, deferral and negative outcomes.
 
-## 7. SUMO and ns-3 fidelity requirements
+## 8. Milestone gates
 
-### SUMO
+**M0:** full-method novelty and observability contract audit → **M1:** public data inventories → **M2–M3:** benign ns-3, 3D/SUMO mobility and correct attack/monitor hooks → **M4:** 8-family pilot → **M5:** leakage-controlled causal features → **M6:** comparators/Kaggle models → **M7:** locked mission calibration → **M8:** independent test/transfer/ablations → **M9:** *fresh* closed-loop evaluation → **M10:** statistical reporting and paper.
 
-Record: exact SUMO version; road-network source and network hash; coordinate system; route-generation rules; vehicle classes; departures; car-following/lane-change settings; random seed; traffic demand; and time step.
-
-Validate: nonempty trajectories, vehicle counts, vehicle entry/exit times, spatial bounds, and exported timestamps. Retain mobility scenario manifests and hashes for generated maps/routes (not large trace files in Git).
-
-### ns-3
-
-Record: exact ns-3 release/commit and build flags; mobility configuration; communication standard and protocol stack; PHY/MAC and channel configuration; propagation/loss models; transmission power; packet generation; congestion/load; seeds/run indices; warmup and observation duration; and packet-trace settings.
-
-Validate independently: packet generation/reception counts, timestamp alignment, units, route continuity, and accounting for dropped messages. Do not label a generic wireless configuration as a particular V2X radio standard without implementing and verifying the corresponding stack.
-
-### Integration gate
-
-Before SIM-03, create a small end-to-end integration test proving that the intended vehicle IDs, coordinate transforms, timestamps, and mobility updates are interpreted correctly. Document any differences between offline trace replay and online coupling. **An integration that has not passed this gate cannot support cross-layer performance claims.**
-
-## 8. Statistical plan
-
-- Experimental replication must use **independent training runs** and/or **independent simulation seeds/scenarios**. Packets within one run and consecutive frames from the same trip are not independent samples.
-- Report per-run values and mean/standard deviation when appropriate, plus a 95% confidence interval computed at the correct independent unit (e.g., seed or scenario, or a clustered bootstrap).
-- Prefer **paired comparisons** when methods are evaluated on identical split IDs, mobility traces, network scenarios and seeds. Preserve paired difference arrays.
-- Choose a comparison test and multiple-testing correction *before* the confirmatory analysis. Check assumptions; do not substitute packet-level pseudo-replication for independent scenario replication.
-- Report effect sizes and uncertainty, including negative results, not just p-values. Keep exploratory visualizations identified as exploratory.
-- Provide per-class failures, adverse network conditions, and limits to external validity; simulated improvements do not establish on-road deployment performance.
-
-## 9. Per-run manifest specification
-
-Every executed run will require a machine-readable record using the following fields (the executable validator and schema will be added with implementation code):
-
-```yaml
-run_id: "<unique run identifier>"
-status: "planned | running | completed | failed | invalid"
-experiment_id: "EXP-xx | SIM-xx | STAT-xx"
-git_commit: "<full commit SHA>"
-script_or_notebook_revision: "<revision/path>"
-utc_started_at: "<ISO-8601 UTC timestamp>"
-utc_finished_at: "<ISO-8601 UTC timestamp or null>"
-dataset_manifest: "<path and SHA-256>"
-split_manifest: "<path and SHA-256>"
-config_path: "<versioned config path>"
-random_seeds: {}
-environment:
-  platform: "<Kaggle / local / other>"
-  hardware: "<exact host or GPU>"
-  dependencies: "<lockfile / versions>"
-  sumo_version: "<if used>"
-  ns3_revision: "<if used>"
-execution_command: "<exact invocation>"
-inputs: []
-outputs: []
-metrics_file: "<path or URI and SHA-256>"
-warnings: []
-notes: "<limitations and deviations>"
-```
-
-This example is a specification, **not a real experiment record**. The schema will become strict and validated in the next implementation phase; fields irrelevant to a run type may be explicitly null.
-
-## 10. Release / reporting checklist
-
-A result may be cited in the manuscript only when:
-
-- [ ] Its exact input partition, scenario/configuration, seed(s) and commit are recorded.
-- [ ] Executed source matches the repository version, and any notebook edits are archived.
-- [ ] It passed integrity checks for labels, partition overlap, and metric computation.
-- [ ] Its run manifests and raw predictions or network event summaries can be retrieved.
-- [ ] Figures/tables derive from recorded values; no hand-edited or fabricated numbers.
-- [ ] Statistical intervals, experimental counts, and aggregation units are stated.
-- [ ] The repository provides verified instructions to rerun the associated analysis.
-- [ ] Limitations, failures, and unperformed experiments are reported transparently.
-
-## 11. Open decisions for the next stage
-
-Before experiments are coded, explicitly settle: **the exact research question**, outcome label/decision, verified dataset availability, benchmark comparisons, primary statistical endpoint, and network simulator integration mode. This document is a reproducibility contract, not evidence of a finished methodology.
+No paper-ready performance claim is warranted before these gates. No base-study presentation is required in the repository README.

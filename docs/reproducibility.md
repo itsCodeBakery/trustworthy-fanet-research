@@ -1,23 +1,13 @@
-# Reproducibility and provenance
+# Reproducibility requirements — UAV/FANET
 
-This is the repository's recording standard. Specific implementations and commands will be filled in only after execution and verification.
+**Status:** requirements, not execution evidence.
 
-## Required information per run
+For every run record: experiment ID, **independent mission-family ID**, clean/attack/policy variant, code revision, exact simulator and software versions/build flags, exogenous mobility and offered-traffic hashes, radio/routing config, random stream assignments, observation-feature schema, relevant dataset checksums, train/dev/cal/test partition, decision deadline, frozen calibration artifact, and output/trace hashes.
 
-1. **Identity:** experiment ID, date/time, source commit SHA, and script/notebook revision.
-2. **Inputs:** dataset name, source/version, SHA-256 checksums, preprocessing, and split IDs.
-3. **Configuration:** complete hyperparameters, evaluation settings, seeds, and simulation scenario.
-4. **Environment:** Python/dependency versions, CUDA/driver/GPU if used, OS, SUMO and ns-3 version/build details where relevant.
-5. **Execution:** exact command or Kaggle notebook commit/version, run status, duration, warnings, and any failures.
-6. **Outputs:** prediction files or summaries, definition of every metric, aggregation rules, and hashes/locations of bulky artifacts.
-7. **Statistical evidence:** number of independent runs, uncertainty intervals, significance tests (when applicable), and sampling units.
+Keep three separate classes of records: locally observable packet/radio events, *privileged evaluator-only* drop reason/attacker truth, and independent mission manifests. The deployable feature pipeline may never open privileged truth. Test that deleting its evaluator truth input cannot alter detector predictions.
 
-## Integrity rules
+Report all 2,743 runs as *planned* until verified executed. Never infer independent sample count from packet windows, monitoring views or repeated neural seeds. Bootstrap and compare at the mission-family level with paired variants retained. Every paper figure/table must be generated from actual saved run-level outcomes.
 
-- Keep train/validation/test partitions independent and document any grouping that prevents leakage.
-- Preserve raw measured outputs; derived tables and plots must be generated from traceable files.
-- Separate completed, failed, and pending experiments; do not claim planned analyses were executed.
-- Archive external data and artifacts at stable locations with checksums and access instructions.
-- Record sources of non-determinism and limitations of the reproducibility environment.
+An all-benign complete-mission alarm calibration statement applies to the fixed 600 s horizon and **exchangeable** calibration/test missions with frozen detector. It does not establish false-accusation control under arbitrary mission/channel distribution shift. All violations, outages, false avoidance, and negative results must be reported.
 
-This document specifies reporting requirements; it does not assert that the full pipeline has been run.
+The uploaded Overleaf package ZIP used for this scope alignment passed its local ZIP CRC check and has SHA-256 `6640605e9eb3bd3066b6bfc8e08a40bfa268c0f86e5c4d641b836545eb52891a`. This is provenance of the planning archive, **not** verification of an ns-3 run.
