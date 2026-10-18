@@ -1,0 +1,27 @@
+{
+  "archive_compressed_gib": 17.37,
+  "checked_at_utc": "2026-10-18T11:00:26.237926+00:00",
+  "gitlab_request_error": "HTTP 401",
+  "gitlab_tree_status": "NOT_VERIFIED",
+  "important_space_warning": "The estimated two-copy footprint excludes any extracted data, notebook caches and overhead. Do not download until extraction size, persistent storage and run-time quota are checked.",
+  "local_runtime_free_gib": 87.16,
+  "manifest": {
+    "bytes_reported": 18648943241,
+    "direct_sample_parquet_available_in_record": false,
+    "files_are_split_zip": true,
+    "files_reported": 72,
+    "problems": [
+      "Expected v2 metadata; received None"
+    ],
+    "status": "MISMATCH",
+    "version_reported": null
+  },
+  "official_record_url": "https://zenodo.org/records/13692267",
+  "parquet_samples_inspected": 0,
+  "public_dataset_bytes_downloaded": 0,
+  "record": 13692267,
+  "source_repo": "https://git.soton.ac.uk/ch1u20/fan-ghets24/",
+  "stage": "METADATA_AND_CLOUD_CAPACITY_PREFLIGHT_ONLY",
+  "temporary_space_for_split_parts_plus_reconstructed_zip_gib": 34.74,
+  "zenodo_request_error": null
+}

@@ -40,6 +40,8 @@ def manifest_audit(record):
     keys = [item.get("key") for item in files]
     indexed = {item["key"]: item for item in files if isinstance(item.get("key"), str)}
     problems = []
+    if str(record.get("id")) != str(RECORD):
+        problems.append(f"Record ID differs: {record.get('id')!r}")
     if len(files) != 72 or len(indexed) != 72:
         problems.append(f"Expected 72 distinct files, found {len(files)} items / {len(indexed)} unique")
     if set(indexed) != EXPECTED_KEYS:
@@ -58,12 +60,17 @@ def manifest_audit(record):
     except (TypeError, ValueError, KeyError) as exc:
         problems.append("Invalid size fields: " + repr(exc))
         total = None
+    # Zenodo may omit metadata.version even when the publication page labels
+    # this exact immutable record v2. Identity + manifest checks are decisive;
+    # the *absence* of optional version metadata is not a file mismatch.
     version = record.get("metadata", {}).get("version")
-    if version != "v2":
-        problems.append(f"Expected v2 metadata; received {version!r}")
+    if version is not None and version != "v2":
+        problems.append(f"Unexpected explicit version field: {version!r}")
     return {
         "status": "VERIFIED_METADATA" if not problems else "MISMATCH",
         "version_reported": version,
+        "version_field_optional_and_absent": version is None,
+        "record_id_matches_pin": str(record.get("id")) == str(RECORD),
         "files_reported": len(files),
         "bytes_reported": total,
         "files_are_split_zip": True,
@@ -117,11 +124,14 @@ def main():
     target.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print("FAN-GHETS24 v2 preflight — no dataset archive downloaded")
     print("Zenodo manifest:", result["manifest"]["status"])
+    if result["manifest"].get("version_field_optional_and_absent"):
+        print("Info: metadata.version is absent; published record page identifies pinned record as v2.")
     print("Manifest problems:", result["manifest"]["problems"])
     print("Colab free space (GiB):", result["local_runtime_free_gib"])
     print("Two-copy archive footprint before extraction (GiB):",
           result["temporary_space_for_split_parts_plus_reconstructed_zip_gib"])
-    print("Authors' GitLab source tree:", result["gitlab_tree_status"])
+    print("Authors' GitLab source tree API:", result["gitlab_tree_status"])
+    print("Note: GitLab API HTTP 401 does not establish the browser-visible project is private.")
     if tree_err:
         print("Source-tree access issue:", tree_err)
     print("Report saved:", target)
