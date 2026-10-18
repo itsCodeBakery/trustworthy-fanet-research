@@ -1,0 +1,142 @@
+{
+  "audit_date": "2026-10-18",
+  "source": "Attached user-executed Google Colab audit output (source: /content/UAVIDS-2025.csv)",
+  "uploaded_audit_sha256": "35c600442dcaab8fc3abb5af58c13c1d5d8779585a1e5baf6f14c16d725e865e",
+  "source_dataset_sha256": "d50d339f68be7b23f0bf089dd438b20a1835c13182d8641220538121440164d0",
+  "rows": 122171,
+  "feature_columns": [
+    "FlowDuration/s",
+    "TxPackets",
+    "RxPackets",
+    "LostPackets",
+    "TxBytes",
+    "RxBytes",
+    "TxPacketRate/s",
+    "RxPacketRate/s",
+    "TxByteRate/s",
+    "RxByteRate/s",
+    "MeanDelay/s",
+    "MeanJitter/s",
+    "Throughput/Kbps",
+    "MeanPacketSize",
+    "PacketDropRate",
+    "AverageHopCount"
+  ],
+  "columns_omitted": [
+    "FlowID",
+    "SrcAddr",
+    "DstAddr",
+    "SrcPort",
+    "DstPort",
+    "Protocol",
+    "label"
+  ],
+  "fold_procedure": "StratifiedGroupKFold(n_splits=5, shuffle=True, random_state=42), group=SrcAddr",
+  "repeated_feature_row_occurrences": 8219,
+  "rows_in_repeated_feature_groups": 10774,
+  "cross_label_conflicting_feature_groups": 0,
+  "rows_in_conflicting_feature_groups": 0,
+  "total_source_address_groups": 176,
+  "folds": [
+    {
+      "fold": 1,
+      "train_rows": 99724,
+      "test_rows": 22447,
+      "train_source_groups": 141,
+      "test_source_groups": 35,
+      "source_overlap_groups": 0,
+      "feature_hashes_shared": 3,
+      "test_rows_having_train_feature_hash": 3,
+      "all_classes_in_train_and_test": true,
+      "test_labels": {
+        "Blackhole Attack": 5217,
+        "Flooding Attack": 793,
+        "Normal Traffic": 6329,
+        "Sybil Attack": 4453,
+        "Wormhole Attack": 5655
+      }
+    },
+    {
+      "fold": 2,
+      "train_rows": 102877,
+      "test_rows": 19294,
+      "train_source_groups": 142,
+      "test_source_groups": 34,
+      "source_overlap_groups": 0,
+      "feature_hashes_shared": 2,
+      "test_rows_having_train_feature_hash": 2,
+      "all_classes_in_train_and_test": true,
+      "test_labels": {
+        "Blackhole Attack": 4818,
+        "Flooding Attack": 3927,
+        "Normal Traffic": 4378,
+        "Sybil Attack": 1326,
+        "Wormhole Attack": 4845
+      }
+    },
+    {
+      "fold": 3,
+      "train_rows": 97680,
+      "test_rows": 24491,
+      "train_source_groups": 139,
+      "test_source_groups": 37,
+      "source_overlap_groups": 0,
+      "feature_hashes_shared": 3,
+      "test_rows_having_train_feature_hash": 6,
+      "all_classes_in_train_and_test": true,
+      "test_labels": {
+        "Blackhole Attack": 4127,
+        "Flooding Attack": 5962,
+        "Normal Traffic": 3160,
+        "Sybil Attack": 7634,
+        "Wormhole Attack": 3608
+      }
+    },
+    {
+      "fold": 4,
+      "train_rows": 96303,
+      "test_rows": 25868,
+      "train_source_groups": 143,
+      "test_source_groups": 33,
+      "source_overlap_groups": 0,
+      "feature_hashes_shared": 4,
+      "test_rows_having_train_feature_hash": 4,
+      "all_classes_in_train_and_test": true,
+      "test_labels": {
+        "Blackhole Attack": 5448,
+        "Flooding Attack": 5302,
+        "Normal Traffic": 4572,
+        "Sybil Attack": 5396,
+        "Wormhole Attack": 5150
+      }
+    },
+    {
+      "fold": 5,
+      "train_rows": 92100,
+      "test_rows": 30071,
+      "train_source_groups": 139,
+      "test_source_groups": 37,
+      "source_overlap_groups": 0,
+      "feature_hashes_shared": 2,
+      "test_rows_having_train_feature_hash": 4,
+      "all_classes_in_train_and_test": true,
+      "test_labels": {
+        "Blackhole Attack": 6500,
+        "Flooding Attack": 3742,
+        "Normal Traffic": 7733,
+        "Sybil Attack": 5268,
+        "Wormhole Attack": 6828
+      }
+    }
+  ],
+  "all_test_rows_once": true,
+  "total_test_rows_having_train_feature_hashes": 19,
+  "min_test_class_size": 793,
+  "meaning": "Source-disjoint five-class full-flow auxiliary benchmark feasible; independent mission identity and near-duplicate risk not resolved",
+  "restrictions": [
+    "No mission-independent transfer claim",
+    "No per-packet or early selective-forwarding result",
+    "5-fold class-frequency imbalance must be reported",
+    "64-bit feature hashes screen exact matches but are not cryptographic equality proof"
+  ]
+}
