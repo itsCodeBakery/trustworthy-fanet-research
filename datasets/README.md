@@ -2,7 +2,7 @@
 
 **Step 7 status (18 October 2026):** the researcher ran Google Colab integrity/shape checks for the original UAVIDS-2025 CSV and supplied matching output; see [the reported Colab verification record](../evidence/uavids_2025_colab_integrity_2026-10-18.json). The remote notebook was not independently run by the assistant. **FAN-GHETS24 v2 raw samples and underlying mission grouping remain unverified.**
 
-Read the [source-based feasibility audit](../docs/dataset_feasibility.md), [machine-readable source records](source_records.json), [feature readiness matrix](../evidence/dataset_feature_feasibility.csv) and [offline audit utility](../scripts/verify_public_data.py) before writing model code.
+Read the [Colab leakage screening](../docs/uavids_split_audit.md), [recorded diagnostic outputs](../evidence/uavids_2025_leakage_screen_2026-10-18.json), [source-based feasibility audit](../docs/dataset_feasibility.md), [machine-readable source records](source_records.json), [feature readiness matrix](../evidence/dataset_feature_feasibility.csv) and [offline audit utility](../scripts/verify_public_data.py) before writing model code.
 
 | Dataset | Appropriate role | Evidence boundary |
 | --- | --- | --- |

@@ -1,0 +1,88 @@
+{
+  "audit_date": "2026-10-18",
+  "dataset_id": "UAVIDS-2025",
+  "evidence_source": "User-pasted output from Google Colab code cell on locally present /content/UAVIDS-2025.csv",
+  "checksums_already_verified": "See evidence/uavids_2025_colab_integrity_2026-10-18.json",
+  "id_columns_removed": [
+    "FlowID",
+    "SrcAddr",
+    "DstAddr",
+    "SrcPort",
+    "DstPort"
+  ],
+  "identifier_unique_counts": {
+    "FlowID": 122171,
+    "SrcAddr": 176,
+    "DstAddr": 218,
+    "SrcPort": 2,
+    "DstPort": 2
+  },
+  "repeated_feature_rows_excluding_id_columns_and_label": 8219,
+  "note_on_duplicates": "pandas duplicated().sum() counts repeat rows after first occurrence, not necessarily 8219 disjoint duplicate pairs; class-conflict and split overlap not yet measured",
+  "address_group_summaries": [
+    {
+      "keys": [
+        "SrcAddr"
+      ],
+      "groups": 176,
+      "mixed_label_groups": 125,
+      "single_label_groups": 51,
+      "rows_in_single_label_groups": 20240,
+      "rows_in_mixed_label_groups": 101931
+    },
+    {
+      "keys": [
+        "DstAddr"
+      ],
+      "groups": 218,
+      "mixed_label_groups": 150,
+      "single_label_groups": 68,
+      "rows_in_single_label_groups": 692,
+      "rows_in_mixed_label_groups": 121479
+    },
+    {
+      "keys": [
+        "SrcAddr",
+        "DstAddr"
+      ],
+      "groups": 16076,
+      "mixed_label_groups": 10277,
+      "single_label_groups": 5799,
+      "rows_in_single_label_groups": 29069,
+      "rows_in_mixed_label_groups": 93102
+    },
+    {
+      "keys": [
+        "SrcAddr",
+        "DstAddr",
+        "Protocol"
+      ],
+      "groups": 16076,
+      "mixed_label_groups": 10277,
+      "single_label_groups": 5799,
+      "rows_in_single_label_groups": 29069,
+      "rows_in_mixed_label_groups": 93102
+    }
+  ],
+  "protocol_distribution": {
+    "UDP": 122171
+  },
+  "tx_equals_rx_plus_lost_fraction": 0.7990194072243003,
+  "interpretation": [
+    "FlowID unique and address values repeated; direct identifiers can enable shortcuts and must be excluded from model inputs.",
+    "125 of 176 source-address groups contain multiple classes, but 20,240 rows occur in 51 single-class source groups; identity-label association remains a concern.",
+    "8,219 repeated feature rows imply possible overlap between random row splits; actual train/test overlap and conflicting labels have not yet been tested.",
+    "Protocol is constant UDP and has zero categorical variability in this file.",
+    "Only approximately 79.90% satisfy TxPackets = RxPackets + LostPackets; does not alone identify an error or an attack, and packet accounting semantics need source review.",
+    "SrcAddr grouping is a pragmatic stress split, not verified independent physical simulation-run grouping."
+  ],
+  "open_checks": [
+    "Cross-label exact feature-vector collisions",
+    "Feature-vector overlap across candidate train/test folds",
+    "Each fold class support under source-disjoint grouped split",
+    "Destination identity cross-fold overlap and proxy risks",
+    "Availability of authoritative simulation/run metadata"
+  ],
+  "overall_decision": "PASS source file integrity; HOLD model performance claims pending grouped split and ambiguity audit",
+  "raw_file_uploaded_to_github": false
+}
