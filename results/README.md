@@ -6,4 +6,4 @@ Do not place hypothetical numbers, hand-edited metrics, or figures that cannot b
 
 Large training artifacts, checkpoints, packet traces, and raw simulator outputs are stored externally and linked through integrity-checked manifests.
 
-**Status:** No verified results have been added.
+**Status:** A **user-executed and arithmetic-audited auxiliary offline baseline** has been added: [report](uavids_2025_auxiliary_baselines_2026-10-18.md) and [aggregate results](uavids_2025_auxiliary_baselines_2026-10-18.json). The primary ns-3 sequential FANET method remains unimplemented and unevaluated.

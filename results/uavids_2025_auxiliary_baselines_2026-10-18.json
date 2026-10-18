@@ -1,0 +1,112 @@
+{
+  "date": "2026-10-18",
+  "status": "USER_COLAB_RUN_ARITHMETIC_AUDITED_NOT_INDEPENDENTLY_RERUN",
+  "dataset": "UAVIDS-2025",
+  "original_results_file_sha256": "e39cb29c9f43e39a83f35a6f48f0cc35ea64d5b53c3ac86a5313ebf8af2df4f7",
+  "dataset_sha256": "d50d339f68be7b23f0bf089dd438b20a1835c13182d8641220538121440164d0",
+  "rows": 122171,
+  "classes": [
+    "Blackhole Attack",
+    "Flooding Attack",
+    "Normal Traffic",
+    "Sybil Attack",
+    "Wormhole Attack"
+  ],
+  "split": "StratifiedGroupKFold(n_splits=5,shuffle=True,random_state=42), group=SrcAddr",
+  "independent_mission_split_verified": false,
+  "model_results": {
+    "prior_dummy": {
+      "fold_macro_f1": [
+        0.07543377674956622,
+        0.025722599418040736,
+        0.04571263245452244,
+        0.060078843626806835,
+        0.07109458313964617
+      ],
+      "mean_fold_macro_f1": 0.055608487077716484,
+      "mean_fold_accuracy": 0.16461314316342168,
+      "pooled_macro_f1": 0.11224901635371036,
+      "pooled_accuracy": 0.17004853852387228
+    },
+    "balanced_logistic": {
+      "fold_macro_f1": [
+        0.7890992862199662,
+        0.7826915564606374,
+        0.850235088670901,
+        0.8274356996215791,
+        0.8004042882416462
+      ],
+      "mean_fold_macro_f1": 0.8099731838429459,
+      "mean_fold_accuracy": 0.8204861860847243,
+      "pooled_macro_f1": 0.8234958268847035,
+      "pooled_accuracy": 0.8208249093483724
+    },
+    "hist_gradient_boosting": {
+      "fold_macro_f1": [
+        0.9395260860745719,
+        0.9323787872392261,
+        0.9481165426105805,
+        0.9470160391395155,
+        0.9406175772886222
+      ],
+      "mean_fold_macro_f1": 0.9415310064705033,
+      "mean_fold_accuracy": 0.9432283755145099,
+      "pooled_macro_f1": 0.9450564854591571,
+      "pooled_accuracy": 0.943546340784638,
+      "correct": 115274,
+      "errors": 6897,
+      "pooled_confusion_matrix_true_rows_pred_columns": [
+        [
+          22161,
+          13,
+          41,
+          0,
+          3895
+        ],
+        [
+          2,
+          18835,
+          1,
+          770,
+          118
+        ],
+        [
+          25,
+          1,
+          25858,
+          1,
+          287
+        ],
+        [
+          3,
+          362,
+          2,
+          23664,
+          46
+        ],
+        [
+          853,
+          120,
+          349,
+          8,
+          24756
+        ]
+      ]
+    }
+  },
+  "folded_test_rows": [
+    22447,
+    19294,
+    24491,
+    25868,
+    30071
+  ],
+  "shared_train_feature_hash_test_rows": [
+    3,
+    2,
+    6,
+    4,
+    4
+  ],
+  "limitations": "Source-group proxy split, end-of-flow statistics and no causal local monitoring; no mission-level control claim."
+}
