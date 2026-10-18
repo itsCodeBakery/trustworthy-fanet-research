@@ -2,7 +2,7 @@
 
 **Reproducible research on selective-forwarding attacks and uncertain local monitoring in flying ad hoc networks (FANETs).**
 
-[Research problem](docs/study_design.md) · [Novelty audit](docs/novelty_audit.md) · [Baseline fairness](docs/baseline_protocol.md) · [Experimental protocol](docs/experiment_protocol.md) · [Reproducibility](docs/reproducibility.md) · [Data registry](datasets/README.md)
+[Research problem](docs/study_design.md) · [Dataset audit](docs/dataset_feasibility.md) · [Novelty audit](docs/novelty_audit.md) · [Baseline fairness](docs/baseline_protocol.md) · [Experimental protocol](docs/experiment_protocol.md) · [Reproducibility](docs/reproducibility.md) · [Data registry](datasets/README.md)
 
 > **Status — design phase, 18 October 2026.** This repository contains the scientific and reproducibility contract for an original experimental study. The supplied Overleaf research blueprint has planning utilities, but no completed ns-3/SUMO experiment campaign, trained detector, or measured performance advantage. All empirical claims await execution and verification.
 

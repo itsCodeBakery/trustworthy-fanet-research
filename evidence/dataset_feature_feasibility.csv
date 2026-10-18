@@ -1,0 +1,11 @@
+required_field,why_needed,fan_ghets24_v2,uavids_2025,new_ns3,gate
+Per-observer sent/received/witnessed events,Early local evidence,Published local sender/receiver/promiscuous witness logging; exact v2 event schema uninspected,NO aggregate flow records only,MUST PRODUCE,Inspect actual fan parquet and test ns3 handoff
+Successful distinct MAC handoff at sender,Eligible forwarding denominator,NOT VERIFIED from engineered sequence features,NO,REQUIRED,Static three-hop handoff event check
+Observed next-hop forwarding witness by deadline,Distinct timely witness numerator,Published witnessed packet context; pairing and mature deadline NOT VERIFIED,NO,REQUIRED,"Packet identity/TTL, retry dedup, deadline test"
+"Monitor radio busy, beacon freshness and local RSSI",Evidence eligibility,"MIXED/UNKNOWN, check actual Parquet fields",NO per-packet observations,REQUIRED or redesign gate,Feature-level traceability mapping
+Separate malicious forwarding drop vs benign radio loss,Ground truth only,"Published attack points offline JSON metadata, exact per-event truth unresolved",NO cause-specific per-packet drop truth,REQUIRED,Evaluator isolation test
+Independent mission/physical simulation family ID,Avoid train/test leakage and calibrate complete mission,NOT VERIFIED in v2 paired data; published 80/10/10 sequence split,NO,REQUIRED,Recover run IDs or restrict claim
+Complete all-benign mission timer and all pairs,Fixed-horizon false accusation threshold,NOT VERIFIED,NO,REQUIRED,199 independent benign calibration missions
+Causal route avoidance with new delivery/outage traces,Closed-loop mitigation effect,NO frozen public sequences,NO aggregate classification data,REQUIRED,fresh ns-3 AODV response simulations
+Early grey-hole category labels,Public supervised temporal task,"YES per paper attack type/intensity, metadata contains attack points to exclude",NO has Blackhole label but not equivalent to GHA selective drop,CAN GENERATE,Map tasks without mixing labels
+End-of-flow IDS label and numerical aggregates,Auxiliary classification,Different temporal task,YES from archived full CSV header,OPTIONAL,No early-detection claim

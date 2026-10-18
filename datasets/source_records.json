@@ -1,0 +1,72 @@
+{
+  "audit_date": "2026-10-18",
+  "audit_scope": "source documents and uploaded package inventories; public data bytes not downloaded/rehashed in this run",
+  "package_archive": {
+    "name": "UAV_FANET_Research_Overleaf_Package.zip",
+    "sha256": "6640605e9eb3bd3066b6bfc8e08a40bfa268c0f86e5c4d641b836545eb52891a"
+  },
+  "sources": [
+    {
+      "id": "FAN-GHETS24-v2",
+      "doi": "10.5281/zenodo.13692267",
+      "record": 13692267,
+      "version": "v2 (publisher public record)",
+      "canonical_url": "https://zenodo.org/records/13692267",
+      "descriptor_doi": "10.1038/s41597-025-05560-1",
+      "paper_links_v1": "https://zenodo.org/records/13315419",
+      "licensed_in_archived_inventory": "CC-BY-4.0",
+      "files": 72,
+      "bytes": 18648943241,
+      "inventory_sha256": "613f7ee80f442d82ff25cecf9df318616cfa4300255dd46c259f5e05951c3c8f",
+      "raw_downloaded_this_step": false,
+      "raw_hash_verified_this_step": false,
+      "claimed_sequences_from_paper": 31910,
+      "claimed_classes_from_paper": 12,
+      "claimed_features_from_paper": 25,
+      "mission_group_mapping": "unverified",
+      "deployment_handoff_semantics": "unverified in derived v2 features",
+      "permitted_role": "public early temporal classification only pending sample checks"
+    },
+    {
+      "id": "UAVIDS-2025-v1",
+      "doi": "10.5281/zenodo.15336998",
+      "record": 15336998,
+      "version": "v1",
+      "canonical_url": "https://zenodo.org/records/15336998",
+      "licensed_in_archived_inventory": "CC-BY-4.0",
+      "files": 1,
+      "bytes": 20054667,
+      "inventory_sha256": "85c3efda8cec6c83d498bd4bf76323208a09af312ab8537a81f495707df606f7",
+      "csv_name": "UAVIDS-2025.csv",
+      "csv_md5_from_record": "ec84ed5390d5de42b07e8a011709ff82",
+      "csv_sha256_from_prior_package_audit": "d50d339f68be7b23f0bf089dd438b20a1835c13182d8641220538121440164d0",
+      "row_count_from_prior_package_audit": 122171,
+      "nonlabel_cols_from_prior_package_audit": 22,
+      "raw_downloaded_this_step": false,
+      "raw_hash_verified_this_step": false,
+      "has_packet_timestamps_in_archived_columns": false,
+      "has_independent_mission_identity_in_archived_columns": false,
+      "permitted_role": "auxiliary offline flow classification only"
+    },
+    {
+      "id": "NS3-NEW",
+      "canonical_url": null,
+      "status": "not generated",
+      "permitted_role": "main evaluation requiring local monitor and private oracle separation"
+    }
+  ],
+  "archived_inventory_validation": {
+    "both_inventories_structurally_valid": true,
+    "files_examined_for_md5": 0,
+    "fan_files": 72,
+    "fan_bytes": 18648943241,
+    "uavids_files": 1,
+    "uavids_bytes": 20054667
+  },
+  "software_test": {
+    "command": "python -m unittest discover -s tests -v",
+    "test_cases": 3,
+    "tests_passed": 3,
+    "scope": "synthetic fixtures only; no research metrics"
+  }
+}
